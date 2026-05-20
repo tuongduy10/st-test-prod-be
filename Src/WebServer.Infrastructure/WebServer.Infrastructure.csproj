@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="Abstractions\**" />
+		<Compile Remove="BackgroundJobs\**" />
+		<Compile Remove="Cachings\**" />
+		<Compile Remove="Security\Authentications\**" />
+		<EmbeddedResource Remove="Abstractions\**" />
+		<EmbeddedResource Remove="BackgroundJobs\**" />
+		<EmbeddedResource Remove="Cachings\**" />
+		<EmbeddedResource Remove="Security\Authentications\**" />
+		<None Remove="Abstractions\**" />
+		<None Remove="BackgroundJobs\**" />
+		<None Remove="Cachings\**" />
+		<None Remove="Security\Authentications\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\WebServer.Application\WebServer.Application.csproj" />
+		<ProjectReference Include="..\WebServer.Persistence\WebServer.Persistence.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.23" />
+	  <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
+	  <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
+	  <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+
+</Project>
