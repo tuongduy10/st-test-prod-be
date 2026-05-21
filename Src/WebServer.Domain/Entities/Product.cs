@@ -1,4 +1,5 @@
-﻿using WebServer.Domain.Common;
+﻿using WebServer.Domain.Abstractions.Exceptions;
+using WebServer.Domain.Common;
 using WebServer.Domain.Common.Enums;
 
 namespace WebServer.Domain.Entities;
@@ -69,5 +70,19 @@ public class Product : AuditableEntity<Guid>
     public void SoftDelete()
     {
         IsDeleted = true;
+    }
+
+    public void IncreaseStock(
+        Guid variantId,
+        int quantity)
+    {
+        var variant = _variants.FirstOrDefault(x => x.Id == variantId);
+
+        if (variant is null)
+            throw new NotFoundException("Variant not found");
+
+        variant.IncreaseStock(quantity);
+
+        UpdatedAt = DateTime.UtcNow;
     }
 }
