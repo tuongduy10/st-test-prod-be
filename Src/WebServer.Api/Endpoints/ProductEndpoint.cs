@@ -1,4 +1,5 @@
-﻿using WebServer.Application.Features.Products.Commands.CreateProduct;
+﻿using FluentValidation;
+using WebServer.Application.Features.Products.Commands.CreateProduct;
 using WebServer.Application.Features.Products.Commands.IncreaseProductQuantity;
 using WebServer.Application.Features.Products.Commands.SoftDeleteProduct;
 using WebServer.Application.Features.Products.Commands.UpdateProduct;
@@ -35,9 +36,19 @@ public class ProductEndpoint : ICarterModule
 
     public static async Task<IResult> CreateProduct(
         CreateProductCommand command,
+        IValidator<CreateProductCommand> validator,
         ISender sender,
         CancellationToken cancellationToken)
     {
+        var validationResult = await validator.ValidateAsync(
+            command,
+            cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            return Results.ValidationProblem(
+                validationResult.ToDictionary());
+        }
+
         var result = await sender.Send(
             command,
             cancellationToken);
@@ -75,15 +86,17 @@ public class ProductEndpoint : ICarterModule
     }
 
     public static async Task<IResult> IncreaseQuantity(
-        IncreaseProductQuantityCommand request,
+        Guid productId,
+        Guid variantId,
+        int quantity,
         ISender sender,
         CancellationToken cancellationToken)
     {
         await sender.Send(
             new IncreaseProductQuantityCommand(
-                request.ProductId,
-                request.VariantId,
-                request.Quantity),
+                productId,
+                variantId,
+                quantity),
             cancellationToken);
 
         return Results.NoContent();
