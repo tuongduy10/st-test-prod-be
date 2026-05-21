@@ -21,12 +21,15 @@ public class ProductPagingQueryHandler
     {
         var query = _repository
             .GetQueryable()
+            .Where(_ => !_.IsDeleted)
             .OrderByDescending(x => x.CreatedAt)
             .Select(x => new ProductResponseDto
             {
                 Id = x.Id,
                 Name = x.Name,
-                Description = x.Description
+                Description = x.Description,
+                Price = x.Price,
+                Status = x.Status,
             });
         var pagedResults = await PagedResult<ProductResponseDto>
             .CreateAsync(query, request.Page, request.PageSize);
